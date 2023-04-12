@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.landing-book-path {
+	fill: none;
+	stroke-dasharray: 10000;
+	stroke-dataoffset: 10000;
+	fill-rule: evenodd;
+	stroke: black;
+	stroke-width: 7;
+	animation: dash 20s linear alternate infinite;
+}
+
+@keyframes dash {
+	from {
+		stroke-dashoffset: 10000;
+	}
+	to {
+		stroke-dashoffset: 5000;
+	}
+}
