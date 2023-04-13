@@ -3,13 +3,17 @@ import Image from "next/image";
 import { Book } from "~/lib/types";
 import { FiShoppingCart } from "react-icons/fi";
 import Balancer from "react-wrap-balancer";
+import { useCart } from "~/lib/cart";
 
-const BookHero: FunctionComponent<Book> = ({
-	coverImage,
-	title,
-	author,
-	description,
-}) => {
+const BookHero: FunctionComponent<Book> = (book) => {
+	const { addBook } = useCart();
+	const { coverImage, title, author, description, id, price, rating } = book;
+
+	const handleAddToCart = () => {
+		addBook(book);
+		alert("Added to cart!");
+	};
+
 	return (
 		<main className="mx-auto grid min-h-screen w-full max-w-[1024px] grid-cols-2 gap-2 pt-10">
 			<div className="flex items-center justify-center pr-10">
@@ -32,7 +36,10 @@ const BookHero: FunctionComponent<Book> = ({
 				<p className="mt-5 font-bold">
 					<Balancer>{description}</Balancer>
 				</p>
-				<button className="mt-5 flex w-min items-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950">
+				<button
+					onClick={() => handleAddToCart()}
+					className="mt-5 flex w-min items-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950"
+				>
 					<FiShoppingCart className="mr-2" />
 					Add to Cart
 				</button>
