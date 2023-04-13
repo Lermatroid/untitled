@@ -1,4 +1,6 @@
 import { type FunctionComponent } from "react";
+import Link from "next/link";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
 
 export const Hero: FunctionComponent = () => {
 	return (
@@ -6,6 +8,12 @@ export const Hero: FunctionComponent = () => {
 			<div className="flex flex-col justify-center px-2">
 				<h1 className="font-calsans text-8xl font-black">Untitled</h1>
 				<h2 className="font-gray-500 pl-1 text-2xl">Books Made Easy</h2>
+				<Link
+					href={"/about"}
+					className="mt-5 flex w-min flex-nowrap items-center whitespace-nowrap rounded-full bg-black p-1 px-2 text-sm text-white"
+				>
+					Who We Are <BsFillArrowRightCircleFill className="ml-1" />
+				</Link>
 			</div>
 			<div className="col-span-2 flex items-center justify-end">
 				<BookAnimation />
