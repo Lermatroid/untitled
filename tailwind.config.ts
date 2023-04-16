@@ -8,7 +8,6 @@ export default {
 		extend: {
 			fontFamily: {
 				calsans: ["Cal Sans", "sans-serif"],
-				sans: ["var(--font-sans)", ...fontFamily.sans],
 			},
 			keyframes: {
 				"accordion-down": {
