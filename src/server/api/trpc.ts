@@ -17,8 +17,11 @@
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 import { prisma } from "~/server/db";
+import { env } from "~/env.mjs";
 
-type CreateContextOptions = Record<string, never>;
+type CreateContextOptions = {
+	req: NextApiRequest;
+};
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
@@ -31,8 +34,10 @@ type CreateContextOptions = Record<string, never>;
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
 const createInnerTRPCContext = (_opts: CreateContextOptions) => {
+	const cookies = _opts.req.cookies;
 	return {
 		prisma,
+		cookies,
 	};
 };
 
@@ -43,7 +48,7 @@ const createInnerTRPCContext = (_opts: CreateContextOptions) => {
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = (_opts: CreateNextContextOptions) => {
-	return createInnerTRPCContext({});
+	return createInnerTRPCContext({ req: _opts.req });
 };
 
 /**
@@ -56,6 +61,7 @@ export const createTRPCContext = (_opts: CreateNextContextOptions) => {
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { NextApiRequest } from "next";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
 	transformer: superjson,
@@ -85,6 +91,20 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
  */
 export const createTRPCRouter = t.router;
 
+const isAdmin = t.middleware(async ({ ctx, next }) => {
+	const cookies = ctx.cookies;
+	return next({
+		ctx: {
+			isAdmin:
+				cookies &&
+				cookies.admin_uname &&
+				cookies.admin_pass &&
+				cookies.admin_uname === env.ADMIN_UNAME &&
+				cookies.admin_pass === env.ADMIN_PASS,
+		},
+	});
+});
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -94,3 +114,4 @@ export const createTRPCRouter = t.router;
  */
 
 export const publicProcedure = t.procedure;
+export const adminProcedure = t.procedure.use(isAdmin);

@@ -24,14 +24,15 @@ model AuthUser {
 }
 
 model Book {
-    id         String   @id @unique
-    title      String
-    author     String
-    desciption String
-    price      Float
-    rating     Float
-    cover      String
-    reviews    Review[]
+    id          String   @id @unique
+    title       String
+    author      String
+    description String
+    price       Float
+    rating      Float
+    cover       String
+    dateAdded   DateTime @default(now())
+    reviews     Review[]
 }
 
 model AuthSession {

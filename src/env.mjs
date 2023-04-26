@@ -9,6 +9,7 @@ const server = z.object({
 	NODE_ENV: z.enum(["development", "test", "production"]),
 	ADMIN_UNAME: z.string().min(1),
 	ADMIN_PASS: z.string().min(1),
+	EDGE_CONFIG: z.string(),
 });
 
 /**
@@ -30,6 +31,7 @@ const processEnv = {
 	NODE_ENV: process.env.NODE_ENV,
 	ADMIN_UNAME: process.env.ADMIN_UNAME,
 	ADMIN_PASS: process.env.ADMIN_PASS,
+	EDGE_CONFIG: process.env.EDGE_CONFIG,
 	// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
