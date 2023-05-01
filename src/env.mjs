@@ -10,6 +10,8 @@ const server = z.object({
 	ADMIN_UNAME: z.string().min(1),
 	ADMIN_PASS: z.string().min(1),
 	EDGE_CONFIG: z.string(),
+	VERCEL_API_TOKEN: z.string(),
+	VERCEL_EDGE_CONFIG_ID: z.string(),
 });
 
 /**
@@ -32,6 +34,8 @@ const processEnv = {
 	ADMIN_UNAME: process.env.ADMIN_UNAME,
 	ADMIN_PASS: process.env.ADMIN_PASS,
 	EDGE_CONFIG: process.env.EDGE_CONFIG,
+	VERCEL_API_TOKEN: process.env.VERCEL_API_TOKEN,
+	VERCEL_EDGE_CONFIG_ID: process.env.VERCEL_EDGE_CONFIG_ID,
 	// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

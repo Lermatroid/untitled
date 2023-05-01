@@ -7,7 +7,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				calsans: ["Cal Sans", "sans-serif"],
+				calsans: ["var(--calsans)", "sans-serif"],
 			},
 			keyframes: {
 				"accordion-down": {

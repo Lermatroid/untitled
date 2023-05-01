@@ -1,15 +1,15 @@
 import { type AppType } from "next/app";
-import "cal-sans";
 import { api } from "~/utils/api";
 import Nav from "~/components/shared/Nav";
 import "~/styles/globals.css";
+import { calFont } from "~/fonts";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	return (
-		<>
+		<div className={`${calFont.variable}`}>
 			<Nav />
 			<Component {...pageProps} />
-		</>
+		</div>
 	);
 };
 

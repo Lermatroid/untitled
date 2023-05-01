@@ -21,5 +21,6 @@ const config = {
 	images: {
 		domains: ["upload.wikimedia.org"],
 	},
+	experimental: { appDir: true },
 };
 export default config;

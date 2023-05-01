@@ -3,6 +3,7 @@ import { z } from "zod";
 import { env } from "~/env.mjs";
 import { createTRPCRouter, adminProcedure } from "~/server/api/trpc";
 import { nanoid } from "nanoid";
+import { get } from "@vercel/edge-config";
 
 export const adminRouter = createTRPCRouter({
 	validateLogin: adminProcedure
@@ -30,7 +31,7 @@ export const adminRouter = createTRPCRouter({
 			const { title, description, author, price, rating, coverImage } = input;
 			const book = await ctx.prisma.book.create({
 				data: {
-					id: nanoid(7),
+					id: nanoid(7).toLowerCase(),
 					title,
 					description,
 					author,
@@ -40,5 +41,35 @@ export const adminRouter = createTRPCRouter({
 				},
 			});
 			return book;
+		}),
+	setFeaturedBooks: adminProcedure
+		.input(z.array(z.string().min(7).max(7)))
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.isAdmin) throw new TRPCError({ code: "UNAUTHORIZED" });
+			const updateEdgeConfig = await fetch(
+				`https://api.vercel.com/v1/edge-config/${env.VERCEL_EDGE_CONFIG_ID}/items`,
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${env.VERCEL_API_TOKEN}`,
+					},
+					body: JSON.stringify({
+						items: [
+							{
+								operation: "update",
+								key: "booksToFeature",
+								value: input,
+							},
+						],
+					}),
+				}
+			);
+			const res = await updateEdgeConfig.json();
+			if (res.success) {
+				return { success: true, newConfig: get("booksToFeature") };
+			} else {
+				return { success: false, newConfig: null };
+			}
 		}),
 });

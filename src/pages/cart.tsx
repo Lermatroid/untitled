@@ -77,7 +77,7 @@ const CartListing: FunctionComponent<cartListingProps> = (book) => {
 		<div className="grid h-[250px] w-full grid-cols-3 border-b border-b-gray-700">
 			<div className="mx-auto flex aspect-square items-center justify-center">
 				<Image
-					src={book.coverImage}
+					src={book.cover}
 					height={150}
 					width={150}
 					alt={`${book.title} Cover`}

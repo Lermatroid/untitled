@@ -7,6 +7,8 @@ import { AiFillPlusCircle } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { deleteCookie } from "cookies-next";
 import { api } from "~/utils/api";
+import { bookStringConverter } from "~/lib/utils";
+import { parse } from "path";
 
 interface AdminSectionProps {
 	title: string;
@@ -145,10 +147,27 @@ const AddBookForm: FunctionComponent = () => {
 
 const FeaturedBooksSection: FunctionComponent = () => {
 	const [featured, setFeatured] = useState("");
+	const setFeaturedBooks = api.admin.setFeaturedBooks.useMutation();
+	const defaultFeaturedBooks = api.public.getFeaturedBooks.useQuery();
+	const handleSetFeaturedBooks = async () => {
+		const parsedFeatured = bookStringConverter(featured);
+		if (parsedFeatured.success) {
+			const res = await setFeaturedBooks.mutateAsync(parsedFeatured.data);
+			alert("Featured books updated successfully!");
+		} else {
+			alert(
+				"Updating featued books failed. Please ensure that the book IDs are valid and in the format of comma seperated with no spaces."
+			);
+		}
+	};
 	return (
 		<div className="p-1">
 			<p className="text-md font-calsans">Featued Book IDs</p>
-			<Input onChange={(e) => setFeatured(e.target.value)} className="w-full" />
+			<Input
+				defaultValue={defaultFeaturedBooks.data?.join(",")}
+				onChange={(e) => setFeatured(e.target.value)}
+				className="w-full"
+			/>
 			<p className="mt-2 max-w-[500px] text-xs">
 				Book IDs should be seperated by commas with no spaces. For example:
 				1,2,3,4,5

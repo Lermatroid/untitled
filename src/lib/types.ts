@@ -7,7 +7,7 @@ export interface Book {
 	author: string;
 	price: number;
 	rating: number;
-	coverImage: string;
+	cover: string;
 }
 
 export const bookSchema = z.object({
@@ -17,5 +17,5 @@ export const bookSchema = z.object({
 	author: z.string(),
 	price: z.number().min(0),
 	rating: z.number().min(0).max(5),
-	coverImage: z.string().url(),
+	cover: z.string().url(),
 });

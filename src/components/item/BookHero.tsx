@@ -1,3 +1,5 @@
+"use client";
+
 import { type FunctionComponent } from "react";
 import Image from "next/image";
 import { Book } from "~/lib/types";
@@ -7,7 +9,7 @@ import { useCart } from "~/lib/cart";
 
 const BookHero: FunctionComponent<Book> = (book) => {
 	const { addBook } = useCart();
-	const { coverImage, title, author, description, id, price, rating } = book;
+	const { cover, title, author, description, id, price, rating } = book;
 
 	const handleAddToCart = () => {
 		addBook(book);
@@ -19,7 +21,7 @@ const BookHero: FunctionComponent<Book> = (book) => {
 			<div className="flex items-center justify-center pr-10">
 				<div className="relative mx-auto h-full w-full">
 					<Image
-						src={coverImage}
+						src={cover}
 						fill
 						className="object-contain"
 						alt={`${title} Cover`}
