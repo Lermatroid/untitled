@@ -5,10 +5,11 @@ import { get } from "@vercel/edge-config";
 import { prisma } from "~/server/db";
 import "cal-sans";
 
+export const dynamic = "force-dynamic";
+
 const Home = async () => {
 	const books = await prisma.book.findMany();
 	const featuredBooks = (await get("booksToFeature")) as string[];
-	console.log(featuredBooks);
 	return (
 		<>
 			<Hero />
