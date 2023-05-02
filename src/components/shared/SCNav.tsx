@@ -4,11 +4,14 @@ import { type FunctionComponent, useState } from "react";
 import Link from "next/link";
 import { BsFillBasket3Fill } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const Nav: FunctionComponent = () => {
 	const [searchBarValue, setSearchBarValue] = useState("");
 	const router = useRouter();
+	const { handleSubmit } = useForm();
+	const searchParams = useSearchParams();
 
 	const handleSearch = () => {
 		if (searchBarValue.length > 0) {
@@ -24,11 +27,18 @@ const Nav: FunctionComponent = () => {
 						<h1 className="font-calsans text-2xl font-black">Untitled</h1>
 					</Link>
 				</div>
-				<div className="text-md col-span-2 flex items-center justify-center overflow-hidden rounded-full font-sans font-bold focus-within:border focus-within:border-blue-500">
+				<form
+					onSubmit={handleSubmit(() => handleSearch)}
+					className="text-md col-span-2 flex items-center justify-center overflow-hidden rounded-full font-sans font-bold focus-within:border focus-within:border-blue-500"
+				>
 					<input
 						onChange={(e) => setSearchBarValue(e.target.value)}
+						defaultValue={
+							searchParams?.has("q") ? (searchParams.get("q") as string) : ""
+						}
 						placeholder="A Incredible New Story..."
 						className="h-full w-[90%] rounded-l-full border-2 border-black  p-3 text-left outline-none"
+						id="searchBar"
 					/>
 					<button
 						onClick={() => handleSearch()}
@@ -36,7 +46,7 @@ const Nav: FunctionComponent = () => {
 					>
 						<FaSearch />
 					</button>
-				</div>
+				</form>
 				<div className="text-md flex items-center justify-end font-sans font-bold">
 					<Link
 						href="/login"

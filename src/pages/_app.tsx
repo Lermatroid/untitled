@@ -1,6 +1,6 @@
 import { type AppType } from "next/app";
 import { api } from "~/utils/api";
-import Nav from "~/components/shared/Nav";
+import Nav from "~/components/shared/SCNav";
 import "~/styles/globals.css";
 import { calFont } from "~/fonts";
 
