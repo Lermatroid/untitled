@@ -18,7 +18,7 @@ const LandingSection: FunctionComponent<LandingSectionProps> = ({
 	books,
 }) => {
 	return (
-		<section className="mx-auto h-screen max-h-[700px] w-full max-w-[1024px]">
+		<section className="mx-auto mb-2 min-h-[700px] w-full max-w-[1024px]">
 			<h1 className="mb-5 font-calsans text-3xl font-black">{title}</h1>
 			<div className="grid w-full grid-cols-3 gap-2">
 				{books.map((book) => {
