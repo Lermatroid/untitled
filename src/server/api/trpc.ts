@@ -18,6 +18,9 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 import { prisma } from "~/server/db";
 import { env } from "~/env.mjs";
+import admin from "firebase-admin";
+import initApi from "~/lib/server/firebaseAdmin";
+import { TRPCError } from "@trpc/server";
 
 type CreateContextOptions = {
 	req: NextApiRequest;
@@ -35,9 +38,11 @@ type CreateContextOptions = {
  */
 const createInnerTRPCContext = (_opts: CreateContextOptions) => {
 	const cookies = _opts.req.cookies;
+	const headers = _opts.req.headers;
 	return {
 		prisma,
 		cookies,
+		headers,
 	};
 };
 
@@ -62,6 +67,7 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { NextApiRequest } from "next";
+import { TRPCClientError } from "@trpc/client";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
 	transformer: superjson,
@@ -105,6 +111,34 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
 	});
 });
 
+const isAuthed = t.middleware(async ({ ctx, next }) => {
+	initApi();
+	const cookies = ctx.cookies;
+	const auth = admin.auth();
+
+	if (cookies && cookies.token && typeof cookies.token === "string") {
+		try {
+			const { uid } = await auth.verifyIdToken(cookies.token);
+			return next({
+				ctx: {
+					isAuthed: true,
+					uid,
+				},
+			});
+		} catch (e) {
+			throw new TRPCError({
+				code: "UNAUTHORIZED",
+				message: "Invalid token.",
+			});
+		}
+	} else {
+		throw new TRPCError({
+			code: "UNAUTHORIZED",
+			message: "No token found.",
+		});
+	}
+});
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -115,3 +149,4 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
 
 export const publicProcedure = t.procedure;
 export const adminProcedure = t.procedure.use(isAdmin);
+export const authedProcedure = t.procedure.use(isAuthed);
