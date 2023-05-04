@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { initApp } from "~/lib/firebase";
 import { useForm } from "react-hook-form";
 import Input from "~/components/shadcn/Input";
+import Link from "next/link";
 
 interface LoginFormItems {
 	email: string;
@@ -52,6 +53,13 @@ const Login: NextPage = () => {
 					Login
 				</button>
 			</form>
+			<p className="mt-5 font-sans text-sm font-bold">
+				Don't have an account yet? Go ahead and{" "}
+				<Link href={"/register"} className="text-blue-500 underline">
+					register here
+				</Link>
+				.
+			</p>
 		</main>
 	);
 };
