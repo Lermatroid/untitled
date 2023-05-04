@@ -14,7 +14,7 @@ const Home = async () => {
 		<>
 			<Hero />
 			<LandingSection
-				title={"Popular"}
+				title={"Featured"}
 				books={books.filter((book) => featuredBooks.includes(book.id))}
 			/>
 			<LandingSection title={"Latest"} books={books} />

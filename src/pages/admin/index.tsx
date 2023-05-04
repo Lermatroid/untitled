@@ -172,7 +172,10 @@ const FeaturedBooksSection: FunctionComponent = () => {
 				Book IDs should be seperated by commas with no spaces. For example:
 				1,2,3,4,5
 			</p>
-			<button className="mt-5 flex w-min items-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950">
+			<button
+				onClick={() => handleSetFeaturedBooks()}
+				className="mt-5 flex w-min items-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950"
+			>
 				<AiFillPlusCircle className="mr-1 text-xl" />
 				Set Featured Books
 			</button>
