@@ -31,8 +31,8 @@ const Login: NextPage = () => {
 		try {
 			const res = await signInWithEmailAndPassword(auth, email, password);
 			console.log(res);
-			alert("Logged in! Redirecting you to the home page.");
-			// router.push("/");
+			alert("Logged in! Redirecting you to the account page.");
+			router.push("/account");
 		} catch (error) {
 			console.log("Error during auth: ", error);
 			alert(
