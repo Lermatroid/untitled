@@ -69,5 +69,12 @@ export const authedRouter = createTRPCRouter({
 					authorName: username,
 				},
 			});
+			return;
 		}),
+	myReviews: authedProcedure.query(async ({ ctx }) => {
+		const reviews = await ctx.prisma.review.findMany({
+			where: { authorID: ctx.uid },
+		});
+		return reviews;
+	}),
 });
