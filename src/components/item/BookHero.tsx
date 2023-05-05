@@ -19,13 +19,8 @@ const BookHero: FunctionComponent<Book> = (book) => {
 	return (
 		<main className="mx-auto grid min-h-screen w-full max-w-[1024px] grid-cols-2 gap-2 pt-10">
 			<div className="flex items-center justify-center pr-10">
-				<div className="relative mx-auto h-full w-full">
-					<Image
-						src={cover}
-						fill
-						className="object-contain"
-						alt={`${title} Cover`}
-					/>
+				<div className="relative mx-auto aspect-[9/12] w-full overflow-hidden rounded-xl border-2 border-b-[6px] border-r-[6px] border-black">
+					<Image src={cover} fill alt={`${title} Cover`} />
 				</div>
 			</div>
 			<div className="flex flex-col justify-center">
