@@ -10,19 +10,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model AuthUser {
-    id           String        @id @unique
-    auth_session AuthSession[]
-    auth_key     AuthKey[]
-    // here you can add custom fields for your user
-    // e.g. name, email, username, roles, etc.
-    name         String
-    email        String
-    reviews      Review[]
-
-    @@map("auth_user")
-}
-
 model Book {
     id          String   @id @unique
     title       String
@@ -35,36 +22,26 @@ model Book {
     reviews     Review[]
 }
 
-model AuthSession {
-    id             String   @id @unique
-    user_id        String
-    active_expires BigInt
-    idle_expires   BigInt
-    auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-    @@index([user_id])
-    @@map("auth_session")
-}
-
-model AuthKey {
-    id              String   @id @unique
-    hashed_password String?
-    user_id         String
-    primary_key     Boolean
-    expires         BigInt?
-    auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-    @@index([user_id])
-    @@map("auth_key")
+model UserInfo {
+    accID    String @id @unique
+    name     String
+    username String
 }
 
 model Review {
-    id       String   @id @unique @default(cuid())
+    id       String @id @unique @default(cuid())
     title    String
     body     String
     rating   Int
     authorID String
     bookID   String
-    author   AuthUser @relation(fields: [authorID], references: [id])
-    book     Book     @relation(fields: [bookID], references: [id])
+    book     Book   @relation(fields: [bookID], references: [id])
+}
+
+model Order {
+    id        String   @id @unique @default(cuid())
+    accID     String
+    itemIDs   String
+    total     Float
+    createdAt DateTime @default(now())
 }

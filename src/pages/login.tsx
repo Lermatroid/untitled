@@ -5,6 +5,8 @@ import { initApp } from "~/lib/firebase";
 import { useForm } from "react-hook-form";
 import Input from "~/components/shadcn/Input";
 import Link from "next/link";
+import { useAuth } from "~/components/auth/AuthContext";
+import useEffectOnce from "~/lib/useEffectOnce";
 
 interface LoginFormItems {
 	email: string;
@@ -12,10 +14,17 @@ interface LoginFormItems {
 }
 
 const Login: NextPage = () => {
-	const app = initApp();
-	const auth = getAuth(app);
+	const auth = getAuth(initApp());
+	const authState = useAuth();
 	const router = useRouter();
 	const { register, handleSubmit } = useForm<LoginFormItems>();
+
+	useEffectOnce(() => {
+		if (authState?.currentUser) {
+			alert("You are already logged in! Redirecting you to the account page.");
+			router.push("/account");
+		}
+	});
 
 	const handleDoSignin = async (data: LoginFormItems) => {
 		const { email, password } = data;
@@ -23,7 +32,7 @@ const Login: NextPage = () => {
 			const res = await signInWithEmailAndPassword(auth, email, password);
 			console.log(res);
 			alert("Logged in! Redirecting you to the home page.");
-			router.push("/");
+			// router.push("/");
 		} catch (error) {
 			console.log("Error during auth: ", error);
 			alert(

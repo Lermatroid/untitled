@@ -4,12 +4,12 @@ import { initApp } from "~/lib/firebase";
 import { useForm } from "react-hook-form";
 import Input from "~/components/shadcn/Input";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import useHasHydrated from "~/lib/useHasHydrated";
-import { appCheck } from "firebase-admin";
+import useEffectOnce from "~/lib/useEffectOnce";
+import { useAuth } from "~/components/auth/AuthContext";
 
 interface registerFormItems {
 	username: string;
+	fullname: string;
 	email: string;
 	password: string;
 }
@@ -17,18 +17,17 @@ interface registerFormItems {
 const Login: NextPage = () => {
 	const { register, handleSubmit } = useForm<registerFormItems>();
 	const router = useRouter();
-	const app = initApp();
-	useEffect(() => {
-		console.log("Howdy");
-		const auth = getAuth(app);
-		if (auth.currentUser) {
-			alert("You are already logged in! Redirecting you to the home page.");
-			router.push("/");
+	const auth = getAuth(initApp());
+	const authState = useAuth();
+
+	useEffectOnce(() => {
+		if (authState?.currentUser) {
+			alert("You are already logged in! Redirecting you to the account page.");
+			router.push("/account");
 		}
-	}, []);
+	});
 
 	const handleDoRegister = async (data: registerFormItems) => {
-		const auth = getAuth(app);
 		createUserWithEmailAndPassword(auth, data.email, data.password)
 			.then((userCredential) => {
 				// Signed in
@@ -55,6 +54,10 @@ const Login: NextPage = () => {
 					<div className="mb-2 max-w-[400px]">
 						<label className="mb-1 font-calsans">Username</label>
 						<Input {...register("username", { required: true })} />
+					</div>
+					<div className="mb-2 max-w-[400px]">
+						<label className="mb-1 font-calsans">Full Name</label>
+						<Input {...register("fullname", { required: true })} />
 					</div>
 					<div className="mb-2 max-w-[400px]">
 						<label className="mb-1 font-calsans">Email</label>

@@ -6,6 +6,9 @@ import { BsFillBasket3Fill } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import AuthProvider from "../auth/AuthProvider";
+import { useAuth } from "../auth/AuthContext";
+import { BsPersonCircle } from "react-icons/bs";
 
 const Nav: FunctionComponent = () => {
 	const [searchBarValue, setSearchBarValue] = useState("");
@@ -48,12 +51,9 @@ const Nav: FunctionComponent = () => {
 					</button>
 				</form>
 				<div className="text-md flex items-center justify-end font-sans font-bold">
-					<Link
-						href="/login"
-						className="ml-5 h-full rounded-full border-2 border-black bg-gray-100 p-3 text-center hover:bg-gray-200"
-					>
-						Login
-					</Link>
+					<AuthProvider>
+						<LoginButton />
+					</AuthProvider>
 					<Link
 						href={"/cart"}
 						className="ml-2 aspect-square h-full rounded-full border-2 border-black bg-gray-100 p-3 text-center hover:bg-gray-200"
@@ -65,6 +65,29 @@ const Nav: FunctionComponent = () => {
 			</div>
 		</nav>
 	);
+};
+
+const LoginButton: FunctionComponent = () => {
+	const auth = useAuth();
+	if (auth?.currentUser) {
+		return (
+			<Link
+				href={"/account"}
+				className="ml-2 aspect-square h-full rounded-full border-2 border-black bg-gray-100 p-3 text-center hover:bg-gray-200"
+			>
+				<BsPersonCircle className="text-2xl" />
+			</Link>
+		);
+	} else {
+		return (
+			<Link
+				href="/login"
+				className="ml-5 h-full rounded-full border-2 border-black bg-gray-100 p-3 text-center hover:bg-gray-200"
+			>
+				Login
+			</Link>
+		);
+	}
 };
 
 export default Nav;

@@ -5,6 +5,7 @@ import { type FunctionComponent } from "react";
 import Image from "next/image";
 import useHasHydrated from "~/lib/useHasHydrated";
 import { AiFillStar } from "react-icons/ai";
+import Link from "next/link";
 
 interface cartListingProps extends Book {
 	removeCallback: (id: string) => void;
@@ -36,9 +37,11 @@ const Cart: NextPage = () => {
 						{cart && hasHydrated ? (
 							<CheckoutListing books={Object.values(cart)} />
 						) : null}
-						<button className="mt-3 w-full rounded bg-black px-5 py-4 text-center font-calsans font-bold text-white hover:bg-gray-950">
-							Checkout
-						</button>
+						<Link href={"/cart/checkout"}>
+							<button className="mt-3 w-full rounded bg-black px-5 py-4 text-center font-calsans font-bold text-white hover:bg-gray-950">
+								Checkout
+							</button>
+						</Link>
 					</div>
 				</div>
 			</div>
