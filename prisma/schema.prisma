@@ -29,13 +29,14 @@ model UserInfo {
 }
 
 model Review {
-    id       String @id @unique @default(cuid())
-    title    String
-    body     String
-    rating   Int
-    authorID String
-    bookID   String
-    book     Book   @relation(fields: [bookID], references: [id])
+    id         String @id @unique
+    title      String
+    body       String
+    rating     Int
+    authorID   String
+    authorName String
+    bookID     String
+    book       Book   @relation(fields: [bookID], references: [id])
 }
 
 model Order {

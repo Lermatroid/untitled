@@ -116,9 +116,10 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
 	const cookies = ctx.cookies;
 	const auth = admin.auth();
 
-	if (cookies && cookies.token && typeof cookies.token === "string") {
+	if (cookies && cookies.fbToken && typeof cookies.fbToken === "string") {
 		try {
-			const { uid } = await auth.verifyIdToken(cookies.token);
+			const { uid } = await auth.verifyIdToken(cookies.fbToken);
+			console.log("Got here! UID: ", uid);
 			return next({
 				ctx: {
 					isAuthed: true,

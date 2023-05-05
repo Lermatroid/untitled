@@ -3,9 +3,10 @@
 import { type FunctionComponent } from "react";
 import Image from "next/image";
 import { Book } from "~/lib/types";
-import { FiShoppingCart } from "react-icons/fi";
+import { BsPencilSquare, BsFillBasket3Fill } from "react-icons/bs";
 import Balancer from "react-wrap-balancer";
 import { useCart } from "~/lib/cart";
+import Link from "next/link";
 
 const BookHero: FunctionComponent<Book> = (book) => {
 	const { addBook } = useCart();
@@ -35,11 +36,18 @@ const BookHero: FunctionComponent<Book> = (book) => {
 				</p>
 				<button
 					onClick={() => handleAddToCart()}
-					className="mt-5 flex w-min items-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950"
+					className="mt-5 flex w-min min-w-[175px] items-center justify-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950"
 				>
-					<FiShoppingCart className="mr-2" />
+					<BsFillBasket3Fill className="mr-2" />
 					Add to Cart
 				</button>
+				<Link
+					href={`/book/${id}/review`}
+					className="mt-5 flex w-min min-w-[175px] items-center justify-center whitespace-nowrap rounded bg-black px-5 py-4 font-calsans font-bold text-white hover:bg-gray-950"
+				>
+					<BsPencilSquare className="mr-2" />
+					Write a Review
+				</Link>
 			</div>
 		</main>
 	);
