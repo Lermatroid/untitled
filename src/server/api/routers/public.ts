@@ -15,4 +15,14 @@ export const publicRouter = createTRPCRouter({
 	getFeaturedBooks: publicProcedure.query(
 		async ({ ctx }) => (await get("booksToFeature")) as string[]
 	),
+	checkIfUsernameIsTaken: publicProcedure
+		.input(z.string())
+		.mutation(async ({ input, ctx }) => {
+			const users = await ctx.prisma.userInfo.findMany({
+				where: {
+					username: input,
+				},
+			});
+			return users.length > 0;
+		}),
 });

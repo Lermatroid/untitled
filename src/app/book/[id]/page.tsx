@@ -48,7 +48,7 @@ const ReviewListing: FunctionComponent<reviewListingProps> = ({
 	author,
 }) => {
 	return (
-		<div className="rounded-xl border-2 border-b-4 border-black p-5">
+		<div className="mb-2 rounded-xl border-2 border-b-4 border-black p-5">
 			<h1 className="font-calsans text-xl font-black">{title}</h1>
 			<h2 className="mb-5 font-calsans text-sm text-gray-500">By @{author}</h2>
 			<Balancer className="text-md font-bold">

@@ -2,7 +2,7 @@
 import { getApps, initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-import { setCookie } from "cookies-next";
+import { setCookie, deleteCookie } from "cookies-next";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,8 +28,7 @@ export const initApp = () => {
 };
 
 export const refreshAccessTokenCookie = async (doLoginRedir = true) => {
-	initApp();
-	const auth = getAuth();
+	const auth = getAuth(initApp());
 	const user = auth.currentUser;
 	if (user) {
 		const token = await user.getIdToken();
@@ -39,4 +38,11 @@ export const refreshAccessTokenCookie = async (doLoginRedir = true) => {
 		console.error("Erorr when refreshing access token cookie: no user found.");
 		return false;
 	}
+};
+
+export const doSignout = async () => {
+	const auth = getAuth(initApp());
+	deleteCookie("fbToken");
+	await auth.signOut();
+	location.reload();
 };

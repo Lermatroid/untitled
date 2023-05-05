@@ -1,11 +1,12 @@
 import { type NextPage } from "next";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { initApp } from "~/lib/firebase";
+import { initApp, refreshAccessTokenCookie } from "~/lib/firebase";
 import { useForm } from "react-hook-form";
 import Input from "~/components/shadcn/Input";
 import { useRouter } from "next/router";
 import useEffectOnce from "~/lib/useEffectOnce";
 import { useAuth } from "~/components/auth/AuthContext";
+import { api } from "~/utils/api";
 
 interface registerFormItems {
 	username: string;
@@ -20,6 +21,9 @@ const Login: NextPage = () => {
 	const auth = getAuth(initApp());
 	const authState = useAuth();
 
+	const checkIfUsernameIsTaken =
+		api.public.checkIfUsernameIsTaken.useMutation();
+	const createUserData = api.authed.updateProfileInfo.useMutation();
 	useEffectOnce(() => {
 		if (authState?.currentUser) {
 			alert("You are already logged in! Redirecting you to the account page.");
@@ -28,12 +32,37 @@ const Login: NextPage = () => {
 	});
 
 	const handleDoRegister = async (data: registerFormItems) => {
+		const checkIfUsernameIsTakenResponse =
+			await checkIfUsernameIsTaken.mutateAsync(data.username);
+
+		if (checkIfUsernameIsTakenResponse) {
+			return alert(
+				"That username is already taken! Please try a different one."
+			);
+		}
+
+		if (
+			data.fullname.length < 5 ||
+			data.username.length < 5 ||
+			data.password.length < 5 ||
+			data.email.length < 3
+		) {
+			return alert(
+				"Please make sure all fields are filled out correctly and that they meet the minimum length requirements of 5 characters!"
+			);
+		}
+
 		createUserWithEmailAndPassword(auth, data.email, data.password)
 			.then((userCredential) => {
 				// Signed in
 				const user = userCredential.user;
 				console.log(user);
-				alert("Account created! Redirecting you to login page.");
+				refreshAccessTokenCookie(false);
+				createUserData.mutateAsync({
+					name: data.fullname,
+					username: data.username,
+				});
+				alert("Account created! You are now signed in!");
 				router.push("/login");
 				// ...
 			})
