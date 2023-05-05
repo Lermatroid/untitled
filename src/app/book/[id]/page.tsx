@@ -28,14 +28,20 @@ const Book = async ({ params }: { params: { id: string } }) => {
 			<BookHero {...(book as Book)} />
 			<section className="mx-auto min-h-screen w-full max-w-[1024px]">
 				<h2 className="mb-5 font-calsans text-6xl font-black">Reviews</h2>
-				{reviews.map((review) => (
-					<ReviewListing
-						title={review.title}
-						rating={review.rating}
-						body={review.body}
-						author={review.authorName}
-					/>
-				))}
+				{reviews.length > 0 ? (
+					reviews.map((review) => (
+						<ReviewListing
+							title={review.title}
+							rating={review.rating}
+							body={review.body}
+							author={review.authorName}
+						/>
+					))
+				) : (
+					<h1 className="font-calsans text-2xl font-black text-gray-700">
+						No reviews yet, be the first to write one!
+					</h1>
+				)}
 			</section>
 		</>
 	);
