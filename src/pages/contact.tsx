@@ -1,10 +1,4 @@
 import { type NextPage } from "next";
-import {
-	BsArrowDownCircleFill,
-	BsArrowRightCircleFill,
-	BsFillArrowRightCircleFill,
-} from "react-icons/bs";
-import Link from "next/link";
 import Footer from "~/components/shared/Footer";
 
 const Contact: NextPage = () => {
